@@ -1,0 +1,29 @@
+# Core Python
+python-dotenv
+
+# Data handling
+pandas
+numpy
+pyarrow
+
+# NLP & Embeddings
+sentence-transformers
+transformers
+torch
+
+# Vector Databases
+faiss-cpu
+chromadb
+
+# LLM orchestration (optional but recommended)
+langchain
+langchain-community
+langchain-core
+
+# UI
+streamlit
+gradio
+
+# Utilities
+tqdm
+scikit-learn
