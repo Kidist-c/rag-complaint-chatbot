@@ -36,14 +36,14 @@ class ComplainEDAProcessor:
     def plot_product_distribution(self):
         """Plot complaint distribtion by product tyepe"""
         plt.figure(figsize=(10,6))
-        self.df["product"].value_counts().plot(kind= "bar")
+        self.df["Product"].value_counts().plot(kind= "bar")
         plt.title("Complaint Distribution by product type")
         plt.xlabel("Product Type")
         plt.ylabel("Number of Complaints")
         plt.show()
     def add_narative_length(self):
         """Add a new column with the length of the complaint narrative"""
-        self.df["narrative_length"] = self.df["Consumer_complaint_narrative"].apply(lambda x: len(x.split()))
+        self.df["narrative_length"] = self.df["Consumer complaint narrative"].fillna("").apply(lambda x: len(x.split()))
         print("Added 'narrative_length' column.")
         return self.df
     def plot_narrative_length_distribution(self):
@@ -68,7 +68,7 @@ class ComplainEDAProcessor:
         return self.df
     def remove_empty_narratives(self):
         """Remove rows with empty complaint narratives"""
-        self.df=self.df.dropna(subset=["Consumer complaint narrative"],inplace=True)
+        self.df.dropna(subset=["Consumer complaint narrative"],inplace=True)
         self.df=self.df[self.df["Consumer complaint narrative"].str.strip()!=""]# remove white space only narratives
         print(f"Removed empty narrative rows. Remaining rows: {self.df.shape[0]}")
         return self.df
