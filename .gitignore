@@ -55,5 +55,9 @@ Thumbs.db
 # =========================
 # IDEs
 # =========================
+
 .vscode/
 .idea/
+# Vector stores
+*.bin
+notebooks/vector_store/
