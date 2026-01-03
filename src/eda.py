@@ -9,12 +9,13 @@ class ComplainEDAProcessor:
     """
     Handles EDA and preprocessing for CFPB complaint data.
     """
-    TARGET_PRODUCTS= [
-        "Credit card",
-        "Personal loan",
-        "Savings account"
-        "Money transfer"
-    ]
+    TARGET_PRODUCTS = [
+    "Credit card",
+    "Personal loan",
+    "Savings account",
+    "Money transfer"
+]
+
     def __init__(self, file_path: str):
         self.file_path = file_path
         self.df=None
@@ -41,11 +42,12 @@ class ComplainEDAProcessor:
         plt.xlabel("Product Type")
         plt.ylabel("Number of Complaints")
         plt.show()
-    def add_narative_length(self):
+    def add_narrative_length(self):
         """Add a new column with the length of the complaint narrative"""
         self.df["narrative_length"] = self.df["Consumer complaint narrative"].fillna("").apply(lambda x: len(x.split()))
         print("Added 'narrative_length' column.")
         return self.df
+
     def plot_narrative_length_distribution(self):
         """plot distribution of narrative lengths"""
         plt.figure(figsize=(10,6))
