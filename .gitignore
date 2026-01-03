@@ -61,4 +61,3 @@ Thumbs.db
 # Vector stores
 *.bin
 notebooks/vector_store/
-
