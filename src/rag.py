@@ -20,7 +20,7 @@ class RAGPipeline:
         # Load generator LLM (lightweight but effective)
         self.generator = pipeline(
             "text-generation",
-            model="mistralai/Mistral-7B-Instruct-v0.1",
+            model="google/flan-t5-small",
             max_new_tokens=300,
             temperature=0.2
         )
@@ -54,7 +54,7 @@ class RAGPipeline:
         retrieved = self.retrieve(question, k)
 
         context = "\n\n".join(
-            retrieved["text_chunk"].tolist()
+            retrieved["chunk_text"].tolist()
         )
 
         prompt = self.build_prompt(context, question)
