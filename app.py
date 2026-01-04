@@ -1,13 +1,12 @@
-# app.py
 import gradio as gr
-from src.rag import RAGPipeline  # your pipeline class
+from src.rag import RAGPipeline
 
 # ----------------------------
 # Initialize RAG pipeline
 # ----------------------------
 try:
     rag = RAGPipeline(
-        index_path="notebooks/vector_store/faiss_index.bin",    # adjust if needed
+        index_path="notebooks/vector_store/faiss_index.bin",
         metadata_path="notebooks/vector_store/faiss_metadata.csv"
     )
     print("[INFO] RAG pipeline loaded successfully.")
@@ -25,10 +24,7 @@ def answer_question(user_question):
         return "Please enter a question.", ""
     
     try:
-        # Get answer and retrieved chunks
         answer, retrieved_chunks = rag.answer(user_question, k=5)
-        
-        # Format retrieved chunks for display
         sources = "\n\n".join(
             [f"ID: {row['complaint_id']}, Product: {row['product']}\n{row['chunk_text']}"
              for _, row in retrieved_chunks.iterrows()]
@@ -48,12 +44,11 @@ iface = gr.Interface(
         gr.Textbox(label="Sources / Context")
     ],
     title="CrediTrust Complaint Analyzer",
-    description="Ask questions about customer complaints and get context-aware answers.",
-    allow_flagging="never"
+    description="Ask questions about customer complaints and get context-aware answers."
 )
 
 # ----------------------------
 # Launch the interface
 # ----------------------------
-if name == "main":
+if __name__ == "__main__":
     iface.launch(debug=True)
