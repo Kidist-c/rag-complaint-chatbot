@@ -1,0 +1,41 @@
+name: Python CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Verify FAISS and Sentence Transformers installation
+      run: |
+        python -c "import faiss; print('FAISS installed')"
+        python -c "from sentence_transformers import SentenceTransformer; print('SentenceTransformer installed')"
+
+    - name: Test RAG pipeline import
+      run: |
+        python -c "from src.rag import RAGPipeline; print('RAGPipeline imported successfully')"
+
+    - name: Optional: Run notebook checks
+      uses: actions/setup-node@v3
+      run: |
+        pip install nbconvert
+        jupyter nbconvert --execute --to notebook --inplace notebooks/eda.ipynb
