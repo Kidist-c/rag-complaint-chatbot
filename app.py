@@ -15,7 +15,7 @@ except Exception as e:
     rag = None
 
 # ----------------------------
-# Gradio callback function
+# Gradio callback
 # ----------------------------
 def answer_question(user_question):
     if rag is None:
@@ -23,32 +23,52 @@ def answer_question(user_question):
     if not user_question.strip():
         return "Please enter a question.", ""
     
-    try:
-        answer, retrieved_chunks = rag.answer(user_question, k=5)
-        sources = "\n\n".join(
-            [f"ID: {row['complaint_id']}, Product: {row['product']}\n{row['chunk_text']}"
-             for _, row in retrieved_chunks.iterrows()]
-        )
-        return answer, sources
-    except Exception as e:
-        return f"Error: {e}", ""
+    answer, retrieved_chunks = rag.answer(user_question, k=5)
+    sources = "\n\n".join(
+        [
+            f"ID: {row['complaint_id']}, Product: {row['product']}\n{row['chunk_text']}"
+            for _, row in retrieved_chunks.iterrows()
+        ]
+    )
+    return answer, sources
+
+def clear_fields():
+    return "", "", ""
 
 # ----------------------------
-# Build Gradio Interface
+# Build Gradio UI
 # ----------------------------
-iface = gr.Interface(
-    fn=answer_question,
-    inputs=gr.Textbox(lines=2, placeholder="Ask a question about customer complaints..."),
-    outputs=[
-        gr.Textbox(label="Answer"),
-        gr.Textbox(label="Sources / Context")
-    ],
-    title="CrediTrust Complaint Analyzer",
-    description="Ask questions about customer complaints and get context-aware answers."
-)
+with gr.Blocks(title="CrediTrust Complaint Analyzer") as demo:
+    gr.Markdown("## 🏦 CrediTrust Complaint Analyzer")
+    gr.Markdown("Ask questions about customer complaints and get context-aware answers.")
+
+    question = gr.Textbox(
+        lines=2,
+        placeholder="Ask a question about customer complaints...",
+        label="Your Question"
+    )
+
+    answer = gr.Textbox(label="Answer")
+    sources = gr.Textbox(label="Sources / Context")
+
+    with gr.Row():
+        submit_btn = gr.Button("Submit")
+        clear_btn = gr.Button("Clear")
+
+    submit_btn.click(
+        fn=answer_question,
+        inputs=question,
+        outputs=[answer, sources]
+    )
+
+    clear_btn.click(
+        fn=clear_fields,
+        inputs=[],
+        outputs=[question, answer, sources]
+    )
 
 # ----------------------------
-# Launch the interface
+# Launch app
 # ----------------------------
 if __name__ == "__main__":
-    iface.launch(debug=True)
+    demo.launch(debug=True)
